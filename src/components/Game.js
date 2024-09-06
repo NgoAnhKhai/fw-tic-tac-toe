@@ -6,14 +6,15 @@ function Game() {
   const [xIsNext, setXIsNext] = useState(true);
   const [winner, setWinner] = useState(null);
 
-  //Declaring a Winner
+  // Xác định người thắng cuộc
   useEffect(() => {
-    "Your code here";
+    const gameWinner = calculateWinner(squares);
+    if (gameWinner) {
+      setWinner(gameWinner);
+    }
   }, [squares]);
 
-  //function to check if a player has won.
-  //If a player has won, we can display text such as “Winner: X” or “Winner: O”.
-  //Input: squares: given an array of 9 squares:'X', 'O', or null.
+  // Hàm kiểm tra người chơi chiến thắng
   const calculateWinner = (squares) => {
     const lines = [
       [0, 1, 2],
@@ -27,6 +28,9 @@ function Game() {
     ];
     for (let i = 0; i < lines.length; i++) {
       const [a, b, c] = lines[i];
+      // console.log(squares[a]);
+      // console.log(squares[b]);
+      // console.log(squares[c]);
       if (
         squares[a] &&
         squares[a] === squares[b] &&
@@ -38,25 +42,36 @@ function Game() {
     return null;
   };
 
-  //Handle player
+  // Xử lý khi người chơi click vào ô
   const handleClick = (i) => {
-    "Your code here";
+    if (winner || squares[i]) {
+      return;
+    }
+    const newSquares = squares.slice();
+    console.log(squares);
+    newSquares[i] = xIsNext ? "X" : "O";
+    setSquares(newSquares);
+    setXIsNext(!xIsNext);
   };
 
-  //Restart game
-  const handlRestart = () => {
-    "Your code here";
+  // Khởi động lại trò chơi
+  const handleRestart = () => {
+    setSquares(Array(9).fill(null));
+    setXIsNext(true);
+    setWinner(null);
   };
 
   return (
     <div className="main">
-      <h2 className="result">Winner is: {winner ? winner : "N/N"}</h2>
+      <h2 className="result">Người thắng: {winner ? winner : "Chưa có"}</h2>
       <div className="game">
-        <span className="player">Next player is: {xIsNext ? "X" : "O"}</span>
-        <Board squares={"Your code here"} handleClick={"Your code here"} />
+        <span className="player">
+          Người chơi tiếp theo: {xIsNext ? "X" : "O"}
+        </span>
+        <Board squares={squares} handleClick={handleClick} />
       </div>
-      <button onClick={"Your code here"} className="restart-btn">
-        Restart
+      <button onClick={handleRestart} className="restart-btn">
+        Khởi động lại
       </button>
     </div>
   );
